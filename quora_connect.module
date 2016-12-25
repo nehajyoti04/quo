@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function quora_connect_menu() {
+  // Callback page for edmodo
+  $items['quora-login'] = array(
+      'title' => 'user validate',
+      'page callback' => '_quora_connect_login',
+      'access arguments' => array(
+          'access content'
+      ),
+      'type' => MENU_CALLBACK
+  );
+  // // Settings form for edmodo key and secret
+  // $items['admin/config/people/edmodo-configuration'] = array(
+  //     'title' => 'Edmodo Configuration',
+  //     'description' => 'Configure Edmodo API key & secret.',
+  //     'page callback' => 'drupal_get_form',
+  //     'page arguments' => array(
+  //         'edmodo_admin_settings_form'
+  //     ),
+  //     'access arguments' => array(
+  //         'administer site configuration'
+  //     ),
+  //     'type' => MENU_NORMAL_ITEM
+  // );
+  return $items;
+}
+
+/**
+ * Implements hook_form_alter()
+ */
+function quora_connect_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    case 'user_login' :
+    case 'user_login_block' :
+    case 'user_register_form' :
+      // adding edmodo login link
+      login_using_quora($form);
+      break;
+  }
+}
+
+
+/**
+ * creating edmodo icon
+ *
+ * @param unknown $form
+ * @return multitype:number NULL
+ */
+function login_using_quora(&$form = array()) {
+  global $base_url;
+  $form['edmodo'] = array(
+      '#type' => 'markup',
+      '#markup' => '<span class="edmodo-btn">' . l(t('Edmodo'), 'https://api.edmodo.com/oauth/authorize?width=500&height=500&iframe=true&client_id=' . variable_get('client_id') . '&redirect_uri=' . $base_url . '/edmodo&response_type=code&scope=read_user_email basic read_groups', array(
+          'attributes' => array(
+              'class' => 'colorbox-load'
+          )
+      )) . '</span>',
+      '#weight' => -99
+  );
+
+$api = 'https://api.quora.com/api/logged_in_user';
+$api = 'quora-login';
+  $form['quora'] = array(
+      '#type' => 'markup',
+      '#markup' => '<span class="edmodo-btn">' . l(t('Quora'), $api . '?width=500&height=500&iframe=true&client_id=' . variable_get('client_id') . '&redirect_uri=' . $base_url . '/edmodo&response_type=code&scope=read_user_email basic read_groups', array(
+          'attributes' => array(
+              'class' => 'colorbox-load'
+          )
+      )) . '</span>',
+      '#weight' => -99
+  );
+  // $form['#attached']['css'] = array(
+  //     drupal_get_path('module', 'edmodo') . '/css/edmodo.css',
+  // );
+  return $form;
+}
+
+
+function _quora_connect_login() {
+  drupal_add_js(drupal_get_path("module", "quora_connect") . "/quora_connect.js");
+// $url = 'https://api.quora.com/api/logged_in_user';
+// $output = drupal_json_output($url);
+//  print '<pre>'; print_r("output"); print '</pre>';
+// print '<pre>'; print_r($output); print '</pre>';
+// $result = drupal_http_request('https://api.quora.com/api/logged_in_user');
+// // $result = _GET['https://api.quora.com/api/logged_in_user'];
+// print '<pre>'; print_r("result"); print '</pre>';
+// print '<pre>'; print_r($result); print '</pre>';
+
+// $options = array();
+// $options = array(
+//       'method' => 'POST',
+//       'data' => $data,
+//       'timeout' => 15,
+//       'headers' => array(
+//           'Content-Type' => 'application/x-www-form-urlencoded'
+//       )
+//   );
+
+//  // Requesting to edmodo with details
+//   $result = drupal_http_request($url, $options);
+//   $result->request = 'GET https://api.quora.com/api/logged_in_user';
+//   print '<pre>'; print_r("result"); print '</pre>';
+// print '<pre>'; print_r($result); print '</pre>';
+//   // Converting result data to array which has "access token" and this is required for API calls
+//   $json_array = drupal_json_decode($result->data);
+//   print '<pre>'; print_r("json array"); print '</pre>';
+// print '<pre>'; print_r($json_array); print '</pre>';
+
+
+return "hello";
+}

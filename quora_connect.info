@@ -1,0 +1,4 @@
+name = Quora Connect
+description = Allows user to Signup and Signin using quora account.
+core = 7.x
+package = Quora
